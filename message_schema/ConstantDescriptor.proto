@@ -1,0 +1,6 @@
+syntax = "proto3";
+
+message ConstantDescriptor {
+	string name = 1;
+	double constant = 2;
+}

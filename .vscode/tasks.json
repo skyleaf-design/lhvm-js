@@ -1,0 +1,29 @@
+{
+  // See https://go.microsoft.com/fwlink/?LinkId=733558
+  // for the documentation about the tasks.json format
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "type": "typescript",
+      "tsconfig": "tsconfig.json",
+      "problemMatcher": [
+        "$tsc"
+      ],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
+    },
+    {
+      "label": "protobuf",
+      "type": "shell",
+      "command": "rm -f .src/descriptor/* && protoc --plugin=protoc-gen-ts=./node_modules/.bin/protoc-gen-ts --js_out=import_style=commonjs,binary:./src/descriptor --ts_out=./src/descriptor -I ./message_schema ./message_schema/*.proto",
+      "problemMatcher": []
+    },
+    {
+      "type": "gulp",
+      "task": "default",
+      "problemMatcher": []
+    }
+  ]
+}

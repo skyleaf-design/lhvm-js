@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+import "ZoneDescriptor.proto";
+import "CloudDescriptor.proto";
+import "ConstantDescriptor.proto"; 
+import "PulseDescriptor.proto";
+import "SineSingleDescriptor.proto";  
+import "SineDoubleDescriptor.proto"; 
+
+
+message ZoneOpDescriptor {
+	enum ZoneOp {
+		ADD = 0;
+		MULT = 1;
+		ENTERSTREAM = 3;
+		ENTERZONE = 4;
+	}
+	ZoneOp op = 1;
+	oneof descriptor {
+		ZoneDescriptor selectionZone = 2;
+		CloudDescriptor cloudStream  = 3;
+		ConstantDescriptor constantStream = 4;
+		PulseDescriptor pulseStream = 5;
+		SineSingleDescriptor sineSingleStream = 6;
+		SineDoubleDescriptor sineDoubleStream = 7;
+	}
+}

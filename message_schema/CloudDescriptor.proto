@@ -1,0 +1,9 @@
+syntax = "proto3";
+
+message CloudDescriptor {
+	string name = 1;
+	double frequency = 2;
+	uint32 octaveCount = 3;
+	double persistance = 4;
+	double lacunarity = 5;
+}

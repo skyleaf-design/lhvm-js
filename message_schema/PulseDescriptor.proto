@@ -1,0 +1,9 @@
+syntax = "proto3";
+
+message PulseDescriptor {
+	string name = 1;
+	double amplitude = 2;
+	double phase = 3;
+	double offset = 4;
+	double timeScale = 5;
+}
