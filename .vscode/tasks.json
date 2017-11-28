@@ -8,11 +8,7 @@
       "tsconfig": "tsconfig.json",
       "problemMatcher": [
         "$tsc"
-      ],
-      "group": {
-        "kind": "build",
-        "isDefault": true
-      }
+      ]
     },
     {
       "label": "protobuf",
@@ -23,6 +19,15 @@
     {
       "type": "gulp",
       "task": "default",
+      "problemMatcher": [],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
+    },
+    {
+      "type": "gulp",
+      "task": "serve",
       "problemMatcher": []
     }
   ]

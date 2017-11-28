@@ -10,7 +10,12 @@ const port = (gutil.env.port ? gutil.env.port : 8080);
 
 gulp.task("html", function () {
   return gulp.src("src/index.html")
-    .pipe(gulp.dest("dist"));
+    .pipe(gulp.dest("./dist"));
+});
+
+gulp.task("asset", function () {
+  return gulp.src("./asset/**/*")
+    .pipe(gulp.dest("./dist/asset"));
 });
 
 gulp.task('serve', function() {
@@ -34,6 +39,6 @@ function bundle() {
     .pipe(gulp.dest("./dist"));
 }
 
-gulp.task("default", ["html", "serve"], bundle);
+gulp.task("default", ["html", "serve", "asset"], bundle);
 watchedBrowserify.on("update", bundle);
 watchedBrowserify.on("log", gutil.log);

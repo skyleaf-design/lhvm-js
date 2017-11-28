@@ -1,6 +1,16 @@
+import ZoneOp from './ZoneOp';
+import { StreamFunction, DefaultStreamFunction, Serializable, SerializableConstructor } from './vocabulary';
+
 export class OpStack {
-  something: string;
-  constructor(something: string) {
-    this.something = something;
+  ops: [ZoneOp]
+
+  //@TODO: implement serialization.
+  reduced(at: number): StreamFunction {
+    return DefaultStreamFunction
+  }
+
+  // @TODO: implement value calculation.
+  constructor(ops: [ZoneOp]) {
+    this.ops = ops
   }
 }
