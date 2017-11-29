@@ -1,4 +1,4 @@
-import MutableStream from './MutableStream';
+import { MutableStream } from '../vocabulary';
 
 export default class GenericStream implements MutableStream {
   name: string

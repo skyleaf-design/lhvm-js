@@ -1,8 +1,12 @@
 import * as jspb from "google-protobuf";
 import { ZoneOpDescriptor } from '../descriptor/ZoneOpDescriptor_pb';
 
-export interface StreamFunction {
+export interface Perceptor {
   (elapsed: number, x_cycle: number, y_cycle: number): number;
+}
+
+export interface Perceptible {
+  valueAt: Perceptor
 }
 
 export interface Serializable {
@@ -14,4 +18,8 @@ export interface SerializableConstructor {
   new(data: Uint8Array): Serializable
 }
 
-export const DefaultStreamFunction: StreamFunction = (a: number, b: number, c: number) => 1.0;
+export interface MutableStream extends Perceptible {
+  name: string
+}
+
+export const DefaultPerceptor: Perceptor = (a: number, b: number, c: number) => 1.0;

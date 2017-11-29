@@ -1,12 +1,12 @@
 import ZoneOp from './ZoneOp';
-import { StreamFunction, DefaultStreamFunction, Serializable, SerializableConstructor } from './vocabulary';
+import { Perceptor, DefaultPerceptor, Serializable, SerializableConstructor } from './vocabulary';
 
 export class OpStack {
   ops: [ZoneOp]
 
   //@TODO: implement serialization.
-  reduced(at: number): StreamFunction {
-    return DefaultStreamFunction
+  reduced(at: number): Perceptor {
+    return DefaultPerceptor
   }
 
   // @TODO: implement value calculation.
