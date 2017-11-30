@@ -2,7 +2,7 @@ import { Perceptible } from "../vocabulary";
 
 enum Dimension { width, height }
 
-class SelectionZone extends Grid<boolean> implements Perceptible {
+export default class SelectionZone extends Grid<boolean> implements Perceptible {
   
   private getIndex(fromCycle: number, forDimension: Dimension): number {
     // Converts radians to 0 -> 1 vector.

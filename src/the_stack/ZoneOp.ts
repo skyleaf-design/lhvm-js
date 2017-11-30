@@ -1,7 +1,13 @@
-import { StreamFunction, Serializable, SerializableConstructor } from "./vocabulary";
+import { Perceptor, MutableStream, Serializable, SerializableConstructor } from "./vocabulary";
 import * as jspb from "google-protobuf";
 
 import { ZoneOpDescriptor } from '../descriptor/ZoneOpDescriptor_pb';
+import CloudStream from './stream/CloudStream';
+import ConstantStream from './stream/ConstantStream';
+import PulseStream from './stream/PulseStream';
+import SineDoubleStream from './stream/SineDoubleStream';
+import SineSingleStream from './stream/SineSingleStream';
+import SelectionZone from './zone/SelectionZone';
 
 export default class ZoneOp implements Serializable {
   descriptor(): ZoneOpDescriptor {
@@ -12,7 +18,7 @@ export default class ZoneOp implements Serializable {
   }
 }
 
-export class AddOp extends ZoneOp {
+export class Add extends ZoneOp {
   descriptor(): ZoneOpDescriptor {
     const descriptor = super.descriptor();
     descriptor.setOp(ZoneOpDescriptor.ZoneOp.ADD);
@@ -20,7 +26,7 @@ export class AddOp extends ZoneOp {
   }
 }
 
-export class MultiplyOp extends ZoneOp {
+export class Multiply extends ZoneOp {
   descriptor(): ZoneOpDescriptor {
     const descriptor = new ZoneOpDescriptor();
     descriptor.setOp(ZoneOpDescriptor.ZoneOp.MULT);
@@ -29,15 +35,29 @@ export class MultiplyOp extends ZoneOp {
 }
 
 
-export class StreamOp extends ZoneOp {
-  stream: StreamFunction
+export class EnterStream extends ZoneOp {
+  stream: MutableStream
   descriptor(): ZoneOpDescriptor {
     const descriptor = new ZoneOpDescriptor();
     descriptor.setOp(ZoneOpDescriptor.ZoneOp.ENTERSTREAM);
     // create a Stream descriptor from the StreamOp's instace's stream property.
     return descriptor;
   }
-  constructor(stream: StreamFunction) {
+  constructor(stream: MutableStream) {
+    super();
+    this.stream = stream;
+  }
+}
+
+export class EnterZone extends ZoneOp {
+  zone: MutableStream
+  descriptor(): ZoneOpDescriptor {
+    const descriptor = new ZoneOpDescriptor();
+    descriptor.setOp(ZoneOpDescriptor.ZoneOp.ENTERSTREAM);
+    // create a Stream descriptor from the StreamOp's instace's stream property.
+    return descriptor;
+  }
+  constructor(stream: MutableStream) {
     super();
     this.stream = stream;
   }

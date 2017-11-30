@@ -1,6 +1,6 @@
 import GenericStream from './GenericStream';
 
-class SineDoubleStream extends GenericStream {
+export default class SineDoubleStream extends GenericStream {
   amplitude: number = 1.0
   offset: number = 1.0
   phase: number = 1.0

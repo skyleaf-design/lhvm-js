@@ -1,7 +1,7 @@
 import GenericStream from './GenericStream';
 import FastSimplexNoise from 'fast-simplex-noise';
 
-class CloudStream extends GenericStream {
+export default class CloudStream extends GenericStream {
   private amplitude: number = 1.0;
   private frequency: number = 1.0;
   private octaves: number = 1;

@@ -1,7 +1,7 @@
 import GenericStream from './GenericStream';
 import { SineSingleDescriptor } from '../../descriptor/SineSingleDescriptor_pb';
 
-class SineSingleStream extends GenericStream {
+export default class SineSingleStream extends GenericStream {
   direction = SineSingleDescriptor.AxisDirection.X;
   amplitude = 1.0;
   offset = 1.0;

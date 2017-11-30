@@ -1,6 +1,6 @@
 import GenericStream from './GenericStream';
 
-class ConstantStream extends GenericStream {
+export default class ConstantStream extends GenericStream {
   constant: number = 1.0;
 
   valueAt(elapsed: number, x_cycle: number, y_cycle: number) {
