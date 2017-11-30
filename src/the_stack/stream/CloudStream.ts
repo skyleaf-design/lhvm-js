@@ -9,25 +9,25 @@ export default class CloudStream extends GenericStream {
 
   private noise: FastSimplexNoise
 
-  getFrequency(): number { return this.frequency }
-  setFrequency(value: number): void {
+  getFrequency = () => { return this.frequency }
+  setFrequency = (value: number) => {
     this.frequency = value;
     this.noise = this.buildNoise();
   }
 
-  getOctaves(): number { return this.octaves }
-  setOctaves(value: number): void {
+  getOctaves = () => { return this.octaves }
+  setOctaves = (value: number) => {
     this.octaves = value;
     this.noise = this.buildNoise();
   }
 
-  getPersistence(): number { return this.persistence }
-  setPersistence(value: number): void {
+  getPersistence = () => { return this.persistence }
+  setPersistence = (value: number) => {
     this.persistence = value;
     this.noise = this.buildNoise();
   }
   
-  buildNoise(): FastSimplexNoise {
+  private buildNoise = () => {
     return new FastSimplexNoise({
       amplitude: this.amplitude,
       frequency: this.frequency,
@@ -37,7 +37,7 @@ export default class CloudStream extends GenericStream {
       persistence: this.persistence
     })
   }
-  valueAt(elapsed: number, x_cycle: number, y_cycle: number) {
+  valueAt = (elapsed: number, x_cycle: number, y_cycle: number) => {
     return this.noise.raw2D(x_cycle, y_cycle);
   }
 

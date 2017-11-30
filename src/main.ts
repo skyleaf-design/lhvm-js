@@ -8,23 +8,32 @@ import { ZoneDescriptor } from './descriptor/ZoneDescriptor_pb';
 import { ZoneOpDescriptor } from './descriptor/ZoneOpDescriptor_pb';
 
 import { OpStack } from './the_stack/OpStack';
+import CloudStream from "./the_stack/stream/CloudStream";
+import SineDoubleStream from "./the_stack/stream/SineDoubleStream";
 
+import Grid from './the_stack/zone/Grid';
 
-const element = document.getElementById("greeting");
+import { Add, Multiply, EnterStream, EnterZone } from './the_stack/ZoneOp';
 
-const oReq = new XMLHttpRequest();
-oReq.open("GET", "./asset/cloudy_wave.lhso", true);
-oReq.responseType = "arraybuffer";
+interface LiquidHexGlobal { values: number[] }
+declare global {
+  interface Window { LiquidHex: LiquidHexGlobal; }
+}
 
-oReq.onload = function (oEvent) {
-  const arrayBuffer = oReq.response;
-  if (!arrayBuffer) { return }
-  if (!element) { return }
-  const byteArray = new Uint8Array(arrayBuffer);
-  element.innerHTML = Array(byteArray).join(", ");
+const op_stack = new OpStack([
+  new EnterStream(new CloudStream("my_clouds")),
+  new EnterStream(new SineDoubleStream("my_sine")),
+  new Add
+]);
 
-  // @TODO: unserialize this into ZoneOp, which, in turn, unserialize
-  // the Streams they may contain.
-};
+const master = op_stack.reduced();
+window.LiquidHex = { values: new Array<number>(24 * 24) }
 
-oReq.send(null);
+function updateValues() {
+  if (master === null) { console.log("Master function is invalid!"); return }
+  const elapsed = new Date().getTime() / 1000;
+  window.LiquidHex.values = op_stack.calculateGrid(elapsed, 24, 24).getArray();
+  window.requestAnimationFrame(updateValues);
+}
+
+window.requestAnimationFrame(updateValues);

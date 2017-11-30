@@ -50,15 +50,15 @@ export class EnterStream extends ZoneOp {
 }
 
 export class EnterZone extends ZoneOp {
-  zone: MutableStream
+  zone: SelectionZone
   descriptor(): ZoneOpDescriptor {
     const descriptor = new ZoneOpDescriptor();
     descriptor.setOp(ZoneOpDescriptor.ZoneOp.ENTERSTREAM);
     // create a Stream descriptor from the StreamOp's instace's stream property.
     return descriptor;
   }
-  constructor(stream: MutableStream) {
+  constructor(zone: SelectionZone) {
     super();
-    this.stream = stream;
+    this.zone = zone;
   }
 }

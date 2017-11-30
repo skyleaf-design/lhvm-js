@@ -6,12 +6,12 @@ export default class PulseStream extends GenericStream {
   offset: number = 1.0;
   timeScale: number = 1.0;
 
-  private _time_value(elapsed: number): number {
+  private _time_value = (elapsed: number) => {
     const local_time = elapsed * this.timeScale;
     return Math.sin(local_time + this.phase);
   }
 
-  valueAt(elapsed: number, x_cycle: number, y_cycle: number) {
+  valueAt = (elapsed: number, x_cycle: number, y_cycle: number) => {
     return Math.max(
       (this._time_value(elapsed) * this.amplitude)
       +

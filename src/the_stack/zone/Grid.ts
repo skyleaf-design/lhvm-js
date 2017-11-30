@@ -1,4 +1,4 @@
-class Grid<T> {
+export default class Grid<T> {
   // Store the grid elements in a one-dimensional array.
   // Items are stored by column, then by row:
   //

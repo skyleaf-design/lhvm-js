@@ -13,6 +13,11 @@ gulp.task("html", function () {
     .pipe(gulp.dest("./dist"));
 });
 
+gulp.task("vizualizer", function () {
+  return gulp.src("src/vizualizer/**/*")
+    .pipe(gulp.dest("./dist"));
+});
+
 gulp.task("asset", function () {
   return gulp.src("./asset/**/*")
     .pipe(gulp.dest("./dist/asset"));
@@ -20,8 +25,13 @@ gulp.task("asset", function () {
 
 gulp.task('serve', function() {
   const server = express();
-  server.use(express.static('./dist'));
+  server.use(express.static('./dist', { etag: false, index: "vizualizer.html" }));
   server.listen(port);
+});
+
+gulp.task('watch', function() {
+  gulp.watch('src/vizualizer', ['vizualizer']);
+  gulp.watch('asset', ['asset']);
 });
 
 const watchedBrowserify = watchify(browserify({
@@ -39,6 +49,6 @@ function bundle() {
     .pipe(gulp.dest("./dist"));
 }
 
-gulp.task("default", ["html", "serve", "asset"], bundle);
+gulp.task("default", ["html", "vizualizer", "serve", "asset", "watch"], bundle);
 watchedBrowserify.on("update", bundle);
 watchedBrowserify.on("log", gutil.log);

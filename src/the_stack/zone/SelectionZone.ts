@@ -1,4 +1,5 @@
 import { Perceptible } from "../vocabulary";
+import Grid from './Grid';
 
 enum Dimension { width, height }
 
