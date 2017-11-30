@@ -19,7 +19,7 @@ function combine_perceptors(operation: NumberOperation, p1: Perceptor, p2: Perce
   }
 }
 
-export class OpStack {
+export default class OpStack {
   ops: [ZoneOp]
 
   // Recursive version of reduced().
@@ -43,7 +43,7 @@ export class OpStack {
         if (firstPerceptorY === null) { return [ null, branch1_indexY ] }
         const [secondPerceptorY, branch2_indexY] = this.reduce_stream(branch1_indexY);
         if (secondPerceptorY === null) { return [ null, branch2_indexY ] }
-        return [ combine_perceptors(add, firstPerceptorY, secondPerceptorY), branch2_indexY];
+        return [ combine_perceptors(mult, firstPerceptorY, secondPerceptorY), branch2_indexY];
 
       case EnterStream:
         const stream_op = <EnterStream> op;

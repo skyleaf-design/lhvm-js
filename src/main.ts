@@ -7,9 +7,12 @@ import { SineDoubleDescriptor } from './descriptor/SineDoubleDescriptor_pb';
 import { ZoneDescriptor } from './descriptor/ZoneDescriptor_pb';
 import { ZoneOpDescriptor } from './descriptor/ZoneOpDescriptor_pb';
 
-import { OpStack } from './the_stack/OpStack';
+import OpStack from './the_stack/OpStack';
 import CloudStream from "./the_stack/stream/CloudStream";
+import ConstantStream from "./the_stack/stream/ConstantStream";
 import SineDoubleStream from "./the_stack/stream/SineDoubleStream";
+import SineSingleStream from "./the_stack/stream/SineSingleStream";
+
 
 import Grid from './the_stack/zone/Grid';
 
@@ -21,9 +24,9 @@ declare global {
 }
 
 const op_stack = new OpStack([
-  new EnterStream(new CloudStream("my_clouds")),
-  new EnterStream(new SineDoubleStream("my_sine")),
-  new Add
+  new EnterStream(new ConstantStream("my_constant", 1.0)),
+  new EnterStream(new SineSingleStream("my_sine")),
+  new Multiply,
 ]);
 
 const master = op_stack.reduced();
