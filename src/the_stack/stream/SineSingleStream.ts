@@ -1,32 +1,30 @@
 import { MutableStream } from '../vocabulary';
 import { SineSingleDescriptor } from '../../descriptor/SineSingleDescriptor_pb';
+import * as uuid from 'uuid';
 
 export default class SineSingleStream implements MutableStream {
-  readonly name: string = "";
+  descriptor: SineSingleDescriptor
   
-  private _amplitude: number = 1.0;
-  get amplitude(): number { return this._amplitude }
-  set amplitude(new_value: number) { this._amplitude = new_value }
+  get name(): string { return this.descriptor.getName() }
+  set name(new_value: string) { this.descriptor.setName(new_value) }
+  
+  get amplitude(): number { return this.descriptor.getAmplitude() }
+  set amplitude(new_value: number) { this.descriptor.setAmplitude(new_value) }
 
-  _time_offset: number = 1.0;
-  get timeOffset(): number { return this._time_offset }
-  set timeOffset(new_value: number) { this._time_offset = new_value }
+  get timeOffset(): number { return this.descriptor.getPhase() }
+  set timeOffset(new_value: number) { this.descriptor.setPhase(new_value) }
 
-  _amplitude_offset: number = 1.0;
-  get amplitudeOffset(): number { return this._amplitude_offset }
-  set amplitudeOffset(new_value: number) { this._amplitude_offset = new_value }
+  get amplitudeOffset(): number { return this.descriptor.getOffset() }
+  set amplitudeOffset(new_value: number) { this.descriptor.setOffset(new_value) }
 
-  _time_scale: number = 1.0;
-  get timeScale(): number { return this._time_scale }
-  set timeScale(new_value: number) { this._time_scale = new_value }
+  get timeScale(): number { return this.descriptor.getTimescale() }
+  set timeScale(new_value: number) { this.descriptor.setTimescale(new_value) }
 
-  _wavelength: number = 1.0;
-  get wavelength(): number { return this._wavelength }
-  set wavelength(new_value: number) { this._wavelength = new_value }
+  get wavelength(): number { return this.descriptor.getWavelength() }
+  set wavelength(new_value: number) { this.descriptor.setWavelength(new_value) }
 
-  _direction: SineSingleDescriptor.AxisDirection = SineSingleDescriptor.AxisDirection.X;
-  get direction(): number { return this._direction }
-  set direction(new_value: number) { this._direction = new_value }
+  get direction(): SineSingleDescriptor.AxisDirection { return this.descriptor.getDirection() }
+  set direction(new_value: SineSingleDescriptor.AxisDirection ) { this.descriptor.setDirection(new_value) }
 
   private axis_time_value = (elapsed: number, cycle: number) => {
     const local_time = elapsed * this.timeScale;
@@ -43,5 +41,15 @@ export default class SineSingleStream implements MutableStream {
       +
       this.amplitudeOffset * this.amplitude
     , 0.00001);
+  }
+
+  data(): Uint8Array { return this.descriptor.serializeBinary() }
+
+  constructor(descriptor?: SineSingleDescriptor) {
+    if (!descriptor) {
+      descriptor = new SineSingleDescriptor();
+      descriptor.setName(uuid.v1());
+    }
+    this.descriptor = descriptor;
   }
 }

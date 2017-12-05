@@ -1,9 +1,14 @@
-import ZoneOp from './ZoneOp';
+import { ZoneOp } from './ZoneOp';
 import { Perceptor, DefaultPerceptor, Serializable, SerializableConstructor } from './vocabulary';
 
+import { ZoneOpDescriptor } from '../descriptor/ZoneOpDescriptor_pb';
 import { Add, Multiply, EnterStream, EnterZone } from './ZoneOp';
 
+import { ConstantDescriptor } from '../descriptor/ConstantDescriptor_pb';
+import ConstantStream from './stream/ConstantStream';
+
 import Grid from './zone/Grid';
+import { OpStackDescriptor } from '../descriptor/OpStackDescriptor_pb';
 
 interface NumberOperation { (x: number, y: number): number }
 
@@ -19,8 +24,39 @@ function combine_perceptors(operation: NumberOperation, p1: Perceptor, p2: Perce
   }
 }
 
-export default class OpStack {
-  ops: [ZoneOp]
+export default class OpStack implements Serializable {
+  descriptor: OpStackDescriptor
+
+  // Re-inflate the opstack from the opstack descriptor, which will,
+  // in turn, re-inflate the ops from their descriptors, which will,
+  // in turn, re-inflate the streams or zones they contain (if present)
+  // from their descriptors.
+
+  // Note that this re-renders O(n!) when we are processing the stack.
+  get ops(): Array<ZoneOp> {
+    return this.descriptor.getOpsList().map((zone_op_descriptor) => {
+      switch (zone_op_descriptor.getOp()) {
+        case ZoneOpDescriptor.ZoneOp.ADD:
+          return new Add();
+        case ZoneOpDescriptor.ZoneOp.MULT:
+          return new Multiply();
+        case ZoneOpDescriptor.ZoneOp.ENTERSTREAM:
+          return new EnterStream(zone_op_descriptor);
+        case ZoneOpDescriptor.ZoneOp.ENTERZONE:
+          return new EnterZone(zone_op_descriptor);
+        default:
+          // @TODO: we should return a NOp here.
+          return new Multiply();
+      }
+    });
+  }
+  // set ops(new_value: Array<ZoneOp> ) {
+  //   this.descriptor.setOpsList(new_value.map((op) => {
+  //     // @TODO: find out which constructor created the zone op
+  //     // create a descriptor from each op.
+  //     // return the descriptor.
+  //   }));
+  // }
 
   // Recursive version of reduced().
   // If the perceptor composition fails, returns the default perceptor, due to 
@@ -57,7 +93,6 @@ export default class OpStack {
     }
   }
 
-  //@TODO: implement serialization.
   reduced(atIndex?: number): Perceptor | null {
     const target_index = atIndex === undefined ? this.ops.length - 1 : atIndex;
     const composed_perceptor = this.reduce_stream(target_index)[0];
@@ -79,8 +114,26 @@ export default class OpStack {
     return new Grid(dimension_x, dimension_y, results);
   }
 
-  // @TODO: implement value calculation.
-  constructor(ops: [ZoneOp]) {
-    this.ops = ops
+  data(): Uint8Array { return this.descriptor.serializeBinary() }
+
+  constructor(descriptor?: OpStackDescriptor) {
+    if (!descriptor) {
+      descriptor = new OpStackDescriptor();
+      descriptor.setDimensionX(24);
+      descriptor.setDimensionY(24);
+      descriptor.setFocusIndex(0);
+
+      // In order to make an opstack, we need an op.
+      // In order to make an op, we need a stream.
+      const constant_descriptor = new ConstantDescriptor();
+      constant_descriptor.setConstant(4.0);
+
+      const op_descriptor = new ZoneOpDescriptor();
+      op_descriptor.setConstantstream(constant_descriptor);
+      op_descriptor.setOp(ZoneOpDescriptor.ZoneOp.ENTERSTREAM);
+
+      descriptor.setOpsList([op_descriptor]);
+    }
+    this.descriptor = descriptor;
   }
 }

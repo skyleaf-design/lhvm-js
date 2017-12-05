@@ -7,6 +7,7 @@ export default class Grid<T> {
   protected width: number;
   protected height: number;
 
+  // @TODO: use propery accessors or readonly properties.
   getWidth(): number { return this.width; }
   getHeight(): number { return this.height; }
   getArray(): Array<T> { return this.array; }

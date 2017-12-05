@@ -10,7 +10,6 @@ export interface Perceptible {
 }
 
 export interface Serializable {
-  descriptor(): ZoneOpDescriptor
   data(): Uint8Array
 }
 
@@ -18,7 +17,7 @@ export interface SerializableConstructor {
   new(data: Uint8Array): Serializable
 }
 
-export interface MutableStream extends Perceptible {
+export interface MutableStream extends Perceptible, Serializable {
   readonly name: string
 }
 

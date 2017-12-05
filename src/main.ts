@@ -23,19 +23,41 @@ declare global {
   interface Window { LiquidHex: LiquidHexGlobal; }
 }
 
-const op_stack = new OpStack([
-  new EnterStream(new ConstantStream("my_constant", 1.0)),
-  new EnterStream(new SineSingleStream("my_sine")),
-  new Multiply,
-]);
+
+
+const constant_descriptor = new ConstantDescriptor();
+const sine_descriptor = new SineSingleDescriptor();
+
+const op1_descriptor = new ZoneOpDescriptor();
+op1_descriptor.setOp(ZoneOpDescriptor.ZoneOp.ENTERSTREAM);
+op1_descriptor.setSinesinglestream(sine_descriptor);
+
+const op2_descriptor = new ZoneOpDescriptor();
+op2_descriptor.setOp(ZoneOpDescriptor.ZoneOp.ENTERSTREAM);
+op2_descriptor.setConstantstream(constant_descriptor);
+
+const op3_descriptor = new ZoneOpDescriptor();
+op3_descriptor.setOp(ZoneOpDescriptor.ZoneOp.MULT);
+
+const opstack_descriptor = new OpStackDescriptor();
+opstack_descriptor.setDimensionX(50);
+opstack_descriptor.setDimensionY(50);
+opstack_descriptor.setOpsList([op1_descriptor, op2_descriptor, op3_descriptor]);
+
+const op_stack = new OpStack(opstack_descriptor);
+
+
 
 const master = op_stack.reduced();
+console.log("master function is... ", master);
+console.log("ops are... ", op_stack.ops);
 window.LiquidHex = { values: new Array<number>(50 * 50) }
 
 function updateValues() {
   if (master === null) { console.log("Master function is invalid!"); return }
   const elapsed = new Date().getTime() / 1000;
   window.LiquidHex.values = op_stack.calculateGrid(elapsed, 50, 50).getArray();
+  window.LiquidHex.values = Array(50 * 50).map((element) => 10.00);
   window.requestAnimationFrame(updateValues);
 }
 

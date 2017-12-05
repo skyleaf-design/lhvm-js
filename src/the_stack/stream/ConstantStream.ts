@@ -1,18 +1,27 @@
 import { MutableStream } from '../vocabulary';
+import * as uuid from 'uuid';
+import { ConstantDescriptor } from '../../descriptor/ConstantDescriptor_pb';
 
 export default class ConstantStream implements MutableStream {
-  readonly name: string = "";
+  descriptor: ConstantDescriptor;
 
-  private _constant: number = 1.0;
-  get constant(): number { return this._constant }
-  set constant(new_value: number) { this._constant = new_value }
+  get name(): string { return this.descriptor.getName() }
+  set name(new_value: string) { this.descriptor.setName(new_value) }
+
+  get constant(): number { return this.descriptor.getConstant() }
+  set constant(new_value: number) { this.descriptor.setConstant(new_value) }
 
   valueAt = (elapsed: number, x_cycle: number, y_cycle: number) => {
-    return this._constant;
+    return this.descriptor.getConstant();
   }
 
-  constructor(name: string, constant: number) {
-    this.name = name;
-    this._constant = constant;
+  data(): Uint8Array { return this.descriptor.serializeBinary() }
+
+  constructor(descriptor?: ConstantDescriptor) {
+    if (!descriptor) {
+      descriptor = new ConstantDescriptor();
+      descriptor.setName(uuid.v1());
+    }
+    this.descriptor = descriptor;
   }
 }
