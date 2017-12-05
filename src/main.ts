@@ -30,12 +30,12 @@ const op_stack = new OpStack([
 ]);
 
 const master = op_stack.reduced();
-window.LiquidHex = { values: new Array<number>(24 * 24) }
+window.LiquidHex = { values: new Array<number>(50 * 50) }
 
 function updateValues() {
   if (master === null) { console.log("Master function is invalid!"); return }
   const elapsed = new Date().getTime() / 1000;
-  window.LiquidHex.values = op_stack.calculateGrid(elapsed, 24, 24).getArray();
+  window.LiquidHex.values = op_stack.calculateGrid(elapsed, 50, 50).getArray();
   window.requestAnimationFrame(updateValues);
 }
 

@@ -22,7 +22,7 @@ export default class Grid<T> {
     const backing_index = this.indexFor(atColumn, atRow);
     return this.array[backing_index];
   }
-  setValue(value: T, atColumn: number, atRow: number): T {
+  setValue(value: T, atColumn: number, atRow: number) {
     const backing_index = this.indexFor(atColumn, atRow);
     this.array[backing_index] = value;
   }
