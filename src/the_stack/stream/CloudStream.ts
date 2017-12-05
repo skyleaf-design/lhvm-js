@@ -1,34 +1,41 @@
-import GenericStream from './GenericStream';
+import { MutableStream } from '../vocabulary';
 import FastSimplexNoise from 'fast-simplex-noise';
 
-export default class CloudStream extends GenericStream {
-  private amplitude: number = 1.0;
-  private frequency: number = 1.0;
-  private octaves: number = 1;
-  private persistence: number = 1.0;
+export default class CloudStream implements MutableStream {
+  readonly name: string = "";
+
+  private _amplitude: number = 1.0;
+  get amplitude(): number { return this._amplitude }
+  set amplitude(new_value: number) {
+    this._amplitude = new_value;
+    this._build_noise();
+  }
+
+  private _frequency: number = 1.0;
+  get frequency(): number { return this._frequency }
+  set frequency(new_value: number) {
+    this._frequency = new_value;
+    this._build_noise;
+  }
+
+  private _octaves: number = 1;
+  get octaves(): number { return this._octaves }
+  set octaves(new_value: number) {
+    this._octaves = new_value;
+    this._build_noise();
+  }
+
+  private _persistence: number = 1.0;
+  get persistence(): number { return this._persistence }
+  set persistence(new_value: number) {
+    this._persistence = new_value;
+    this._build_noise;
+  }
 
   private noise: FastSimplexNoise
-
-  getFrequency = () => { return this.frequency }
-  setFrequency = (value: number) => {
-    this.frequency = value;
-    this.noise = this.buildNoise();
-  }
-
-  getOctaves = () => { return this.octaves }
-  setOctaves = (value: number) => {
-    this.octaves = value;
-    this.noise = this.buildNoise();
-  }
-
-  getPersistence = () => { return this.persistence }
-  setPersistence = (value: number) => {
-    this.persistence = value;
-    this.noise = this.buildNoise();
-  }
   
-  private buildNoise = () => {
-    return new FastSimplexNoise({
+  private _build_noise = () => {
+    this.noise = new FastSimplexNoise({
       amplitude: this.amplitude,
       frequency: this.frequency,
       max: 255,
@@ -42,7 +49,7 @@ export default class CloudStream extends GenericStream {
   }
 
   constructor(name: string) {
-    super(name);
-    this.noise = this.buildNoise();
+    this.name = name;
+    this._build_noise();
   }
 }

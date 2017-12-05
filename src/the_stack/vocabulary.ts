@@ -19,7 +19,7 @@ export interface SerializableConstructor {
 }
 
 export interface MutableStream extends Perceptible {
-  name: string
+  readonly name: string
 }
 
 export const DefaultPerceptor: Perceptor = (a: number, b: number, c: number) => 1.0;
