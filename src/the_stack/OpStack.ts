@@ -16,11 +16,16 @@ let add: NumberOperation;
 add = function(x: number, y: number) { return x + y; }
 
 let mult: NumberOperation;
-mult = function(x: number, y: number) { return x * y; }
+mult = function(x: number, y: number) {
+  return x * y;
+}
 
 function combine_perceptors(operation: NumberOperation, p1: Perceptor, p2: Perceptor) : Perceptor {
   return (elapsed, x_cycle, y_cycle): number => {
-    return operation(p1(elapsed, x_cycle, y_cycle), p2(elapsed, x_cycle, y_cycle));
+    const p1_result = p1(elapsed, x_cycle, y_cycle);
+    const p2_result = p2(elapsed, x_cycle, y_cycle);
+    const result = operation(p1_result, p2_result);
+    return result;
   }
 }
 
@@ -83,11 +88,11 @@ export default class OpStack implements Serializable {
 
       case EnterStream:
         const stream_op = <EnterStream> op;
-        return [stream_op.stream.valueAt, next_index];
+        return [stream_op.stream.valueAt.bind(stream_op.stream), next_index];
 
       case EnterZone:
         const zone_op = <EnterZone> op;
-        return [zone_op.zone.valueAt, next_index];
+        return [zone_op.zone.valueAt.bind(zone_op.zone), next_index];
 
       default: return this.reduce_stream(next_index);
     }
@@ -104,6 +109,11 @@ export default class OpStack implements Serializable {
     const master = this.reduced();
     if (master === null) { return new Grid(0,0,[]) }
     const results = Array<number>();
+
+
+    // @TODO: master returns null!
+
+
     for (let row_offset = 0; row_offset < dimension_y; row_offset ++) {
       for (let column_offset = 0; column_offset < dimension_x; column_offset++) {
         const x_cycle = column_offset + 1 / dimension_x;

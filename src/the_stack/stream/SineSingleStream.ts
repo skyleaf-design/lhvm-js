@@ -45,11 +45,14 @@ export default class SineSingleStream implements MutableStream {
 
   data(): Uint8Array { return this.descriptor.serializeBinary() }
 
-  constructor(descriptor?: SineSingleDescriptor) {
-    if (!descriptor) {
-      descriptor = new SineSingleDescriptor();
-      descriptor.setName(uuid.v1());
-    }
+  constructor(descriptor: SineSingleDescriptor = new SineSingleDescriptor()) {
+    descriptor.setName(descriptor.getName() || uuid.v1());
+    descriptor.setAmplitude(descriptor.getAmplitude() || 1.0);
+    // Direction is already initialized to the first case, 0, Horizontal.
+    descriptor.setOffset(descriptor.getOffset() || 1.0);
+    descriptor.setPhase(descriptor.getPhase() || 1.0);
+    descriptor.setTimescale(descriptor.getTimescale() || 1.0);
+    descriptor.setWavelength(descriptor.getWavelength() || 1.0);
     this.descriptor = descriptor;
   }
 }

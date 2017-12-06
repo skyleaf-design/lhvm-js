@@ -54,13 +54,13 @@ export default class CloudStream implements MutableStream {
 
   data(): Uint8Array  { return this.descriptor.serializeBinary() }
 
-  constructor(descriptor?: CloudDescriptor) {
-    if (!descriptor) {
-      descriptor = new CloudDescriptor();
-      descriptor.setName(uuid.v1());
-    }
+  constructor(descriptor = new CloudDescriptor()) {
+    descriptor.setName(descriptor.getName() || uuid.v1());
+    descriptor.setFrequency(descriptor.getFrequency() || 1.0);
+    descriptor.setLacunarity(descriptor.getLacunarity() || 1.0);
+    descriptor.setOctavecount(descriptor.getOctavecount() || 1);
+    descriptor.setPersistance(descriptor.getPersistance() || 1.0);
     this.descriptor = descriptor;
-    // @TODO: lacunarity (density of the clouds) is unaccounted for.
     this._build_noise();
   }
 }

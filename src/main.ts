@@ -27,6 +27,9 @@ declare global {
 
 const constant_descriptor = new ConstantDescriptor();
 const sine_descriptor = new SineSingleDescriptor();
+sine_descriptor.setTimescale(2.5);
+sine_descriptor.setAmplitude(15.0);
+sine_descriptor.setWavelength(2.0);
 
 const op1_descriptor = new ZoneOpDescriptor();
 op1_descriptor.setOp(ZoneOpDescriptor.ZoneOp.ENTERSTREAM);
@@ -49,15 +52,12 @@ const op_stack = new OpStack(opstack_descriptor);
 
 
 const master = op_stack.reduced();
-console.log("master function is... ", master);
-console.log("ops are... ", op_stack.ops);
 window.LiquidHex = { values: new Array<number>(50 * 50) }
 
 function updateValues() {
   if (master === null) { console.log("Master function is invalid!"); return }
   const elapsed = new Date().getTime() / 1000;
   window.LiquidHex.values = op_stack.calculateGrid(elapsed, 50, 50).getArray();
-  window.LiquidHex.values = Array(50 * 50).map((element) => 10.00);
   window.requestAnimationFrame(updateValues);
 }
 

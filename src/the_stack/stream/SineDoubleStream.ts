@@ -43,11 +43,13 @@ export default class SineDoubleStream implements MutableStream {
 
   data(): Uint8Array { return this.descriptor.serializeBinary() }
 
-  constructor(descriptor?: SineDoubleDescriptor) {
-    if (!descriptor) {
-      descriptor = new SineDoubleDescriptor();
-      descriptor.setName(uuid.v1());
-    }
+  constructor(descriptor = new SineDoubleDescriptor()) {
+    descriptor.setName(descriptor.getName() || uuid.v1());
+    descriptor.setAmplitude(descriptor.getAmplitude() || 1.0);
+    descriptor.setPhase(descriptor.getPhase() || 1.0);
+    descriptor.setOffset(descriptor.getOffset() || 1);
+    descriptor.setTimescale(descriptor.getTimescale() || 1.0);
+    descriptor.setWavelength(descriptor.getWavelength() || 1.0);
     this.descriptor = descriptor;
   }
 }

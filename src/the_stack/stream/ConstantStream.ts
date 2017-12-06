@@ -17,11 +17,9 @@ export default class ConstantStream implements MutableStream {
 
   data(): Uint8Array { return this.descriptor.serializeBinary() }
 
-  constructor(descriptor?: ConstantDescriptor) {
-    if (!descriptor) {
-      descriptor = new ConstantDescriptor();
-      descriptor.setName(uuid.v1());
-    }
+  constructor(descriptor = new ConstantDescriptor()) {
+    descriptor.setName(descriptor.getName() || uuid.v1());
+    descriptor.setConstant(descriptor.getConstant() || 1.0);
     this.descriptor = descriptor;
   }
 }

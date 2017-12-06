@@ -164,17 +164,13 @@
       function animate() {
         requestAnimationFrame(animate);
         render();
-
       }
 
       function render() {
         updateNeedles(window.LiquidHex.values);
         controls.update();
-
-
         renderer.clear();
         composer.render();
-
       }
 
     </script>

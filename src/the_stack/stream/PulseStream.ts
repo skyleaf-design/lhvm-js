@@ -12,9 +12,11 @@ export default class PulseStream implements MutableStream {
   get amplitude(): number { return this.descriptor.getAmplitude() }
   set amplitude(new_value: number) { this.descriptor.setAmplitude(new_value) }
 
+  // Also called "phase".
   get timeOffset(): number { return this.descriptor.getOffset() }
   set timeOffset(new_value: number) { this.descriptor.setOffset(new_value) }
 
+  // Also called "offset".
   get amplitudeOffset(): number { return this.descriptor.getAmplitude() }
   set amplitudeOffset(new_value: number) { this.descriptor.setAmplitude(new_value) }
 
@@ -38,11 +40,12 @@ export default class PulseStream implements MutableStream {
 
   data(): Uint8Array { return this.descriptor.serializeBinary() }
 
-  constructor(descriptor?: PulseDescriptor) {
-    if (!descriptor) {
-      descriptor = new PulseDescriptor();
-      descriptor.setName(uuid.v1());
-    }
+  constructor(descriptor = new PulseDescriptor()) {
+    descriptor.setName(descriptor.getName() || uuid.v1());
+    descriptor.setAmplitude(descriptor.getAmplitude() || 1.0);
+    descriptor.setPhase(descriptor.getPhase() || 1.0);
+    descriptor.setOffset(descriptor.getOffset() || 1);
+    descriptor.setTimescale(descriptor.getTimescale() || 1.0);
     this.descriptor = descriptor;
   }
 }
