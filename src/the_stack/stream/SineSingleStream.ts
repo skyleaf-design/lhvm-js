@@ -4,11 +4,13 @@ import * as uuid from 'uuid';
 
 export default class SineSingleStream implements MutableStream {
   descriptor: SineSingleDescriptor
+
+  scale: number = 30.0
   
   get name(): string { return this.descriptor.getName() }
   set name(new_value: string) { this.descriptor.setName(new_value) }
   
-  get amplitude(): number { return this.descriptor.getAmplitude() }
+  get amplitude(): number { return this.descriptor.getAmplitude() * this.scale }
   set amplitude(new_value: number) { this.descriptor.setAmplitude(new_value) }
 
   get timeOffset(): number { return this.descriptor.getPhase() }
@@ -20,7 +22,7 @@ export default class SineSingleStream implements MutableStream {
   get timeScale(): number { return this.descriptor.getTimescale() }
   set timeScale(new_value: number) { this.descriptor.setTimescale(new_value) }
 
-  get wavelength(): number { return this.descriptor.getWavelength() }
+  get wavelength(): number { return this.descriptor.getWavelength() / this.scale * 3 }
   set wavelength(new_value: number) { this.descriptor.setWavelength(new_value) }
 
   get direction(): SineSingleDescriptor.AxisDirection { return this.descriptor.getDirection() }

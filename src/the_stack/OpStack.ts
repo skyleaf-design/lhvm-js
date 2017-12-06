@@ -110,14 +110,10 @@ export default class OpStack implements Serializable {
     if (master === null) { return new Grid(0,0,[]) }
     const results = Array<number>();
 
-
-    // @TODO: master returns null!
-
-
-    for (let row_offset = 0; row_offset < dimension_y; row_offset ++) {
-      for (let column_offset = 0; column_offset < dimension_x; column_offset++) {
-        const x_cycle = column_offset + 1 / dimension_x;
-        const y_cycle = row_offset + 1 / dimension_y;
+    for (let row_offset = 1; row_offset <= dimension_y; row_offset++) {
+      for (let column_offset = 1; column_offset <= dimension_x; column_offset++) {
+        const x_cycle = row_offset / dimension_y;
+        const y_cycle = column_offset / dimension_x;
         results.push(master(elapsed, x_cycle, y_cycle));
       }
     }
@@ -126,24 +122,21 @@ export default class OpStack implements Serializable {
 
   data(): Uint8Array { return this.descriptor.serializeBinary() }
 
-  constructor(descriptor?: OpStackDescriptor) {
-    if (!descriptor) {
-      descriptor = new OpStackDescriptor();
-      descriptor.setDimensionX(24);
-      descriptor.setDimensionY(24);
-      descriptor.setFocusIndex(0);
+  constructor(descriptor = new OpStackDescriptor) {
+    descriptor.setDimensionX(descriptor.getDimensionX() || 24);
+    descriptor.setDimensionY(descriptor.getDimensionY() || 24);
+    descriptor.setFocusIndex(descriptor.getFocusIndex() || 0);
 
-      // In order to make an opstack, we need an op.
-      // In order to make an op, we need a stream.
-      const constant_descriptor = new ConstantDescriptor();
-      constant_descriptor.setConstant(4.0);
+    // In order to make an opstack, we need an op.
+    // In order to make an op, we need a stream.
+    const constant_descriptor = new ConstantDescriptor();
+    constant_descriptor.setConstant(4.0);
 
-      const op_descriptor = new ZoneOpDescriptor();
-      op_descriptor.setConstantstream(constant_descriptor);
-      op_descriptor.setOp(ZoneOpDescriptor.ZoneOp.ENTERSTREAM);
+    const op_descriptor = new ZoneOpDescriptor();
+    op_descriptor.setConstantstream(constant_descriptor);
+    op_descriptor.setOp(ZoneOpDescriptor.ZoneOp.ENTERSTREAM);
 
-      descriptor.setOpsList([op_descriptor]);
-    }
+    descriptor.setOpsList(descriptor.getOpsList() || [op_descriptor]);
     this.descriptor = descriptor;
   }
 }

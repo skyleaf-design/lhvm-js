@@ -60,19 +60,22 @@ function needles() {
   geometry.applyMatrix((new THREE.Matrix4()).makeRotationX(-Math.PI / 2));
   
   // This must match the width and height of the heightmap.
-  var max = 50;
-  var roz = 100;
-  for (var _z = 0; _z < max; _z++) {
-    for (var _x = 0; _x < max; _x++) {
+  var max = 49;
+  var roz = 200;
+  for (var _x = 0; _x < max; _x++) {
+    for (var _z = 0; _z < max; _z++) {
       var color = new THREE.Color(0xffffff);
       color.setHSL(_z / max, 1, .3 + 1 * _x / max);
       var material = new THREE.MeshBasicMaterial({color: color});
       var cube = new THREE.Mesh(geometry, material);
-      var pos = new THREE.Vector3((-max / 2 + _x) * roz, 0, (-max / 2 + _z) * roz);
+      //var pos = new THREE.Vector3((-max / 2 + _x) * roz, 0, (-max / 2 + _z) * roz);
+      const x = _x * roz - roz * max / 2;
+      const z = _z * roz - roz * max / 2;
+      var pos = new THREE.Vector3(x, 0, z);
       cube.position.x = pos.x;
       cube.position.y = pos.y;
       cube.position.z = pos.z;
-      needlesArray.push(cube)
+      needlesArray.push(cube);
       scene.add(cube);
     }
   }
@@ -80,11 +83,10 @@ function needles() {
 var pos = new THREE.Vector3(0, 0, 0);
 
 function updateNeedles(heightmap) {
-  // Are our needles arranged by columns, offset by rows?
   for (var i = 0; i < needlesArray.length; i++) {
-    var needle = needlesArray[i]
-    needle.lookAt(pos)
-    needle.position.y = heightmap[i] * 20;
+    var needle = needlesArray[i];
+    needle.lookAt(pos);
+    needle.position.y = heightmap[i];
   }
 }
 

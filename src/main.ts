@@ -18,7 +18,11 @@ import Grid from './the_stack/zone/Grid';
 
 import { Add, Multiply, EnterStream, EnterZone } from './the_stack/ZoneOp';
 
-interface LiquidHexGlobal { values: number[] }
+interface LiquidHexGlobal {
+  values: Array<number>
+  stack: OpStack;
+  stack_data: Uint8Array;
+}
 declare global {
   interface Window { LiquidHex: LiquidHexGlobal; }
 }
@@ -27,9 +31,8 @@ declare global {
 
 const constant_descriptor = new ConstantDescriptor();
 const sine_descriptor = new SineSingleDescriptor();
-sine_descriptor.setTimescale(2.5);
-sine_descriptor.setAmplitude(15.0);
-sine_descriptor.setWavelength(2.0);
+sine_descriptor.setTimescale(3.0);
+sine_descriptor.setAmplitude(10.0);
 
 const op1_descriptor = new ZoneOpDescriptor();
 op1_descriptor.setOp(ZoneOpDescriptor.ZoneOp.ENTERSTREAM);
@@ -47,17 +50,30 @@ opstack_descriptor.setDimensionX(50);
 opstack_descriptor.setDimensionY(50);
 opstack_descriptor.setOpsList([op1_descriptor, op2_descriptor, op3_descriptor]);
 
-const op_stack = new OpStack(opstack_descriptor);
+const op_stack_data = opstack_descriptor.serializeBinary();
 
+window.LiquidHex = {
+  values: new Array<number>(50 * 50),
+  stack: new OpStack(opstack_descriptor),
+  stack_data: op_stack_data
+}
 
+let last_stack_data = op_stack_data;
 
-const master = op_stack.reduced();
-window.LiquidHex = { values: new Array<number>(50 * 50) }
+window.LiquidHex.stack = new OpStack(opstack_descriptor);
+
+let start_time = new Date().getTime()
+
 
 function updateValues() {
-  if (master === null) { console.log("Master function is invalid!"); return }
-  const elapsed = new Date().getTime() / 1000;
-  window.LiquidHex.values = op_stack.calculateGrid(elapsed, 50, 50).getArray();
+  const elapsed = (new Date().getTime() - start_time) / 1000;
+  if (window.LiquidHex.stack_data !== last_stack_data) {
+    const descriptor = OpStackDescriptor.deserializeBinary(window.LiquidHex.stack_data);
+    window.LiquidHex.stack = new OpStack(descriptor);
+    last_stack_data = window.LiquidHex.stack_data;
+  }
+  // The opstack used to calculated grid has no ops!
+  window.LiquidHex.values = window.LiquidHex.stack.calculateGrid(elapsed, 50, 50).getArray();
   window.requestAnimationFrame(updateValues);
 }
 

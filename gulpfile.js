@@ -30,7 +30,7 @@ gulp.task('serve', function() {
 });
 
 gulp.task('watch', function() {
-  gulp.watch('src/vizualizer', ['vizualizer']);
+  gulp.watch('src/vizualizer/**/*', ['vizualizer']);
   gulp.watch('asset', ['asset']);
 });
 
