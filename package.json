@@ -2,7 +2,8 @@
   "name": "lhvm-js",
   "version": "0.0.1",
   "description": "The LiquidHex Virtual Machine (LHVM) implemented in pure JavaScript.",
-  "main": "index.js",
+  "main": "ExternalOpStack.js",
+  "typings": "ExternalOpStack.d.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -30,21 +31,23 @@
     "url": "https://github.com/skyleaf-design/lhvm-js/issues"
   },
   "homepage": "https://github.com/skyleaf-design/lhvm-js#readme",
-  "devDependencies": {
+  "dependencies": {
+    "google-protobuf": "^3.5.0",
     "@types/google-protobuf": "^3.2.7",
-    "@types/uuid": "^3.4.3",
+    "uuid": "^3.1.0",
+    "@types/uuid": "^3.4.3"
+  },
+  "devDependencies": {
     "browserify": "^14.5.0",
     "eslint": "^4.12.0",
     "express": "^4.16.2",
     "fast-simplex-noise": "^3.2.0",
-    "google-protobuf": "^3.5.0",
     "gulp": "^3.9.1",
     "gulp-util": "^3.0.8",
     "ts-protoc-gen": "^0.4.0",
     "tsify": "^3.0.3",
     "tslint": "^5.8.0",
     "typescript": "^2.6.2",
-    "uuid": "^3.1.0",
     "vinyl-source-stream": "^1.1.0",
     "watchify": "^3.9.0"
   }
