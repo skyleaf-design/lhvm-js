@@ -2,24 +2,46 @@ import { MutableStream } from '../vocabulary';
 import * as uuid from 'uuid';
 import { ConstantDescriptor } from '../../descriptor/ConstantDescriptor_pb';
 
-export default class ConstantStream implements MutableStream {
-  descriptor: ConstantDescriptor;
+export interface ConstantState {
+  name: string;
+  constant: number;
+}
 
-  get name(): string { return this.descriptor.getName() }
-  set name(new_value: string) { this.descriptor.setName(new_value) }
 
-  get constant(): number { return this.descriptor.getConstant() }
-  set constant(new_value: number) { this.descriptor.setConstant(new_value) }
+
+export default class ConstantStream implements MutableStream, ConstantState {
+
+  private _name: string;
+  get name(): string { return this._name }
+  set name(new_value: string) { this._name = new_value }
+
+  private _constant: number;
+  get constant(): number { return this._constant }
+  set constant(new_value: number) { this._constant = new_value }
 
   valueAt = (elapsed: number, x_cycle: number, y_cycle: number) => {
-    return this.descriptor.getConstant();
+    return this._constant;
   }
 
+  get descriptor(): ConstantDescriptor {
+    const descriptor = new ConstantDescriptor();
+    descriptor.setName(this._name);
+    descriptor.setConstant(this._constant);
+    return descriptor;
+  }
   data(): Uint8Array { return this.descriptor.serializeBinary() }
 
-  constructor(descriptor = new ConstantDescriptor()) {
-    descriptor.setName(descriptor.getName() || uuid.v1());
-    descriptor.setConstant(descriptor.getConstant() || 1.0);
-    this.descriptor = descriptor;
+  constructor(values?: Partial<ConstantState> | ConstantDescriptor) {
+    values = values || {};
+    if (values.constructor === ConstantDescriptor) {
+      const descriptor = values as ConstantDescriptor;
+      this._name = descriptor.getName();
+      this._constant = descriptor.getConstant();
+    }
+    else {
+      const state = values as Partial<ConstantState>;
+      this._name = state.name || uuid.v1();
+      this._constant = state.constant !== undefined ? state.constant : 1.0;
+    }
   }
 }

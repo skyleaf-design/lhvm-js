@@ -10,6 +10,8 @@ export interface Perceptible {
 }
 
 export interface Serializable {
+  descriptor: any;
+  // @TODO: this should be a get property.
   data(): Uint8Array
 }
 

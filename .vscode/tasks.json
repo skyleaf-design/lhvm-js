@@ -29,6 +29,11 @@
       "type": "gulp",
       "task": "serve",
       "problemMatcher": []
+    },
+    {
+      "type": "gulp",
+      "task": "asset",
+      "problemMatcher": []
     }
   ]
 }

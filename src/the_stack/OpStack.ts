@@ -2,13 +2,17 @@ import { ZoneOp } from './ZoneOp';
 import { Perceptor, DefaultPerceptor, Serializable, SerializableConstructor } from './vocabulary';
 
 import { ZoneOpDescriptor } from '../descriptor/ZoneOpDescriptor_pb';
-import { Add, Multiply, EnterStream, EnterZone } from './ZoneOp';
+import { Add, Multiply, EnterStream, EnterZone } from './ZoneOp/index';
 
 import { ConstantDescriptor } from '../descriptor/ConstantDescriptor_pb';
 import ConstantStream from './stream/ConstantStream';
 
 import Grid from './zone/Grid';
 import { OpStackDescriptor } from '../descriptor/OpStackDescriptor_pb';
+
+
+
+type OpStackState = Array<ZoneOp>;
 
 interface NumberOperation { (x: number, y: number): number }
 
@@ -30,38 +34,9 @@ function combine_perceptors(operation: NumberOperation, p1: Perceptor, p2: Perce
 }
 
 export default class OpStack implements Serializable {
-  descriptor: OpStackDescriptor
-
-  // Re-inflate the opstack from the opstack descriptor, which will,
-  // in turn, re-inflate the ops from their descriptors, which will,
-  // in turn, re-inflate the streams or zones they contain (if present)
-  // from their descriptors.
-
-  // Note that this re-renders O(n!) when we are processing the stack.
-  get ops(): Array<ZoneOp> {
-    return this.descriptor.getOpsList().map((zone_op_descriptor) => {
-      switch (zone_op_descriptor.getOp()) {
-        case ZoneOpDescriptor.ZoneOp.ADD:
-          return new Add();
-        case ZoneOpDescriptor.ZoneOp.MULT:
-          return new Multiply();
-        case ZoneOpDescriptor.ZoneOp.ENTERSTREAM:
-          return new EnterStream(zone_op_descriptor);
-        case ZoneOpDescriptor.ZoneOp.ENTERZONE:
-          return new EnterZone(zone_op_descriptor);
-        default:
-          // @TODO: we should return a NOp here.
-          return new Multiply();
-      }
-    });
-  }
-  // set ops(new_value: Array<ZoneOp> ) {
-  //   this.descriptor.setOpsList(new_value.map((op) => {
-  //     // @TODO: find out which constructor created the zone op
-  //     // create a descriptor from each op.
-  //     // return the descriptor.
-  //   }));
-  // }
+  private _ops: Array<ZoneOp>;
+  get ops(): Array<ZoneOp> { return this._ops }
+  set ops(new_value: Array<ZoneOp>) { this._ops = new_value }
 
   // Recursive version of reduced().
   // If the perceptor composition fails, returns the default perceptor, due to 
@@ -120,23 +95,42 @@ export default class OpStack implements Serializable {
     return new Grid(dimension_x, dimension_y, results);
   }
 
+  get descriptor(): OpStackDescriptor {
+    const descriptor = new OpStackDescriptor();
+    descriptor.setOpsList(this._ops.map((op) => op.descriptor));
+    return descriptor;
+  }
+
   data(): Uint8Array { return this.descriptor.serializeBinary() }
 
-  constructor(descriptor = new OpStackDescriptor) {
-    descriptor.setDimensionX(descriptor.getDimensionX() || 24);
-    descriptor.setDimensionY(descriptor.getDimensionY() || 24);
-    descriptor.setFocusIndex(descriptor.getFocusIndex() || 0);
+  // @TODO: remove concept of "dimensions" and "focus_op" from OpStack--
+  // these are terms that apply to output and UI, which are not concerns
+  // of the op stack at all.
+  constructor(values: OpStackState | OpStackDescriptor) {
+    switch (values.constructor) {
+      case OpStackDescriptor:
+        const descriptor = values as OpStackDescriptor;
+        const op_descriptors = descriptor.getOpsList();
+        this._ops = op_descriptors.map((descriptor) => {
+          switch (descriptor.getOp()) {
+            case ZoneOpDescriptor.ZoneOp.ADD:
+              return new Add();
+            case ZoneOpDescriptor.ZoneOp.MULT:
+              return new Multiply();
+            case ZoneOpDescriptor.ZoneOp.ENTERSTREAM:
+              return new EnterStream(descriptor);
+            case ZoneOpDescriptor.ZoneOp.ENTERZONE:
+              return new EnterZone(descriptor);
+            default:
+              // @TODO: we should return a NOp here.
+              return new Multiply();
+          }
+        });
+        return;
 
-    // In order to make an opstack, we need an op.
-    // In order to make an op, we need a stream.
-    const constant_descriptor = new ConstantDescriptor();
-    constant_descriptor.setConstant(4.0);
-
-    const op_descriptor = new ZoneOpDescriptor();
-    op_descriptor.setConstantstream(constant_descriptor);
-    op_descriptor.setOp(ZoneOpDescriptor.ZoneOp.ENTERSTREAM);
-
-    descriptor.setOpsList(descriptor.getOpsList() || [op_descriptor]);
-    this.descriptor = descriptor;
+      default:
+        const state = values as OpStackState;
+        this._ops = state || Array<ZoneOp>();
+    }
   }
 }

@@ -53,15 +53,6 @@
     // "emitDecoratorMetadata": true,         /* Enables experimental support for emitting type metadata for decorators. */
   },
   "files": [
-    "./src/ExternalOpStack.ts",
-    "./src/descriptor/CloudDescriptor_pb.d.ts",
-    "./src/descriptor/CloudDescriptor_pb.js",
-    "./src/descriptor/ConstantDescriptor_pb.js",
-    "./src/descriptor/OpStackDescriptor_pb.js",
-    "./src/descriptor/PulseDescriptor_pb.js",
-    "./src/descriptor/SineDoubleDescriptor_pb.js",
-    "./src/descriptor/SineSingleDescriptor_pb.js",
-    "./src/descriptor/ZoneDescriptor_pb.js",
-    "./src/descriptor/ZoneOpDescriptor_pb.js"
+    "./src/the_stack/OpStack.ts"
   ]
 }
