@@ -1,9 +1,10 @@
 import OpStack from './the_stack/OpStack';
 import CloudStream from "./the_stack/stream/CloudStream";
 import ConstantStream from "./the_stack/stream/ConstantStream";
+import PulseStream from "./the_stack/stream/PulseStream";
 import SineDoubleStream from "./the_stack/stream/SineDoubleStream";
 import SineSingleStream from "./the_stack/stream/SineSingleStream";
-import { Multiply, EnterStream } from './the_stack/ZoneOp/index';
+import { Add, Multiply, EnterStream, EnterZone } from './the_stack/ZoneOp/index';
 
 
 import Grid from './the_stack/zone/Grid';
@@ -19,13 +20,9 @@ declare global {
 
 
 window.LiquidHex.stack = new OpStack([
-  new EnterStream(new CloudStream()),
-  new EnterStream(new SineDoubleStream({ wavelength: 0.1 })),
-  new Multiply(),
-  new EnterStream(new SineSingleStream({ wavelength: 0.3 })),
-  new Multiply(),
-  new EnterStream(new ConstantStream({ constant: 300 })),
-  new Multiply()
+  new EnterStream(new SineSingleStream({ amplitude: 600, wavelength: 0.07, amplitudeOffset: 1.0 })),
+  new EnterStream(new SineSingleStream({ amplitude: 600, wavelength: 0.07, amplitudeOffset: 1.0, timeOffset: 3 })),
+  new Add()
 ]);
 
 let last_stack_data = window.LiquidHex.stack.data();

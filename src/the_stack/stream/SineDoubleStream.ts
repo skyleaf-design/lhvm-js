@@ -90,8 +90,8 @@ export default class SineDoubleStream implements MutableStream, SineDoubleState 
       const state = values as Partial<SineDoubleState>;
       this._name = state.name || uuid.v1();
       this._amplitude = state.amplitude !== undefined ? state.amplitude : 1.0;
-      this._amplitude_offset = state.amplitudeOffset !== undefined ? state.amplitudeOffset : 1.0;
-      this._time_offset = state.timeOffset !== undefined ? state.timeOffset : 1.0;
+      this._amplitude_offset = state.amplitudeOffset !== undefined ? state.amplitudeOffset : 0.0;
+      this._time_offset = state.timeOffset !== undefined ? state.timeOffset : 0.0;
       this._time_scale = state.timeScale !== undefined ? state.timeScale : 1.0;
       this._wavelength = state.wavelength !== undefined ? state.wavelength : 1.0;
     }
