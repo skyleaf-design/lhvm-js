@@ -60,7 +60,7 @@ function needles() {
   geometry.applyMatrix((new THREE.Matrix4()).makeRotationX(-Math.PI / 2));
   
   // This must match the width and height of the heightmap.
-  var max = 49;
+  var max = 50;
   var roz = 200;
   for (var _x = 0; _x < max; _x++) {
     for (var _z = 0; _z < max; _z++) {

@@ -18,8 +18,6 @@ export default class CloudStream implements MutableStream, CloudStreamState {
   get name(): string { return this._name }
   set name(new_value: string) { this._name = new_value }
 
-  // @TODO: storing the amplitude here, until the differences with the Swift 
-  // version have been sorted out.
   private _amplitude: number = 1.0;
   get amplitude(): number { return this._amplitude }
   set amplitude(new_value: number) {

@@ -15,14 +15,13 @@ interface SineSingleState {
 }
 
 export default class SineSingleStream implements MutableStream {
-  scale: number = 30.0
-  
+
   private _name: string;
   get name(): string { return this._name }
   set name(new_value: string) { this._name = new_value }
   
   private _amplitude: number;
-  get amplitude(): number { return this._amplitude * this.scale }
+  get amplitude(): number { return this._amplitude }
   set amplitude(new_value: number) { this._amplitude = new_value }
 
   private _time_offset: number;
@@ -38,7 +37,7 @@ export default class SineSingleStream implements MutableStream {
   set timeScale(new_value: number) { this._time_scale = new_value }
 
   private _wavelength: number;
-  get wavelength(): number { return this._wavelength / this.scale * 3.0 }
+  get wavelength(): number { return this._wavelength }
   set wavelength(new_value: number) { this._wavelength = new_value }
 
   private _direction: SineSingleDescriptor.AxisDirection;
@@ -47,7 +46,7 @@ export default class SineSingleStream implements MutableStream {
 
   private axis_time_value = (elapsed: number, cycle: number) => {
     const local_time = elapsed * this._time_scale;
-    return Math.sin((cycle / this._wavelength) + local_time + this._time_offset);
+    return Math.sin(cycle / this._wavelength + local_time + this._time_offset);
   }
 
   valueAt = (elapsed: number, x_cycle: number, y_cycle: number) => {

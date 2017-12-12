@@ -1,8 +1,7 @@
-import { ZoneOp } from './ZoneOp';
 import { Perceptor, DefaultPerceptor, Serializable, SerializableConstructor } from './vocabulary';
 
 import { ZoneOpDescriptor } from '../descriptor/ZoneOpDescriptor_pb';
-import { Add, Multiply, EnterStream, EnterZone } from './ZoneOp/index';
+import { ZoneOp, Add, Multiply, EnterStream, EnterZone } from './ZoneOp/index';
 
 import { ConstantDescriptor } from '../descriptor/ConstantDescriptor_pb';
 import ConstantStream from './stream/ConstantStream';
@@ -74,6 +73,7 @@ export default class OpStack implements Serializable {
   }
 
   reduced(atIndex?: number): Perceptor | null {
+    // @TODO: why is this._ops coming up as an Uint8Array?
     const target_index = atIndex === undefined ? this.ops.length - 1 : atIndex;
     const composed_perceptor = this.reduce_stream(target_index)[0];
     return composed_perceptor;
@@ -106,8 +106,10 @@ export default class OpStack implements Serializable {
   // @TODO: remove concept of "dimensions" and "focus_op" from OpStack--
   // these are terms that apply to output and UI, which are not concerns
   // of the op stack at all.
-  constructor(values: OpStackState | OpStackDescriptor) {
+  constructor(values: OpStackState | OpStackDescriptor | Uint8Array) {
     switch (values.constructor) {
+      case Uint8Array:
+        values = OpStackDescriptor.deserializeBinary(values as Uint8Array);
       case OpStackDescriptor:
         const descriptor = values as OpStackDescriptor;
         const op_descriptors = descriptor.getOpsList();

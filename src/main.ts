@@ -20,9 +20,11 @@ declare global {
 
 window.LiquidHex.stack = new OpStack([
   new EnterStream(new CloudStream()),
-  new EnterStream(new SineDoubleStream({ timeScale: 5 })),
+  new EnterStream(new SineDoubleStream({ wavelength: 0.1 })),
   new Multiply(),
-  new EnterStream(new ConstantStream({ constant: 30 })),
+  new EnterStream(new SineSingleStream({ wavelength: 0.3 })),
+  new Multiply(),
+  new EnterStream(new ConstantStream({ constant: 300 })),
   new Multiply()
 ]);
 
