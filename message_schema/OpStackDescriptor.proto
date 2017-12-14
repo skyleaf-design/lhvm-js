@@ -1,7 +1,0 @@
-syntax = "proto3";
-
-import "ZoneOpDescriptor.proto";
-
-message OpStackDescriptor {
-	repeated ZoneOpDescriptor ops = 4;
-}

@@ -7,15 +7,12 @@ enum Dimension { width, height }
 export default class SelectionZone extends Grid<boolean> implements Perceptible, Serializable {
   
   private _get_index(fromCycle: number, forDimension: Dimension): number {
-    // Converts radians to 0 -> 1 vector.
-    const ratio = fromCycle / 2 / Math.PI;
-
     // Get the final index of the dimension.
     const max_index_value = forDimension == Dimension.height ? this.height - 1 : this.width - 1;
 
     // Apply the ratio to the range of indices, round it to the nearest index,
     // and convert it to a 1-indexed Grid index.
-    return Math.round(max_index_value * ratio) + 1
+    return Math.round(max_index_value * fromCycle) + 1
   }
 
   get descriptor(): ZoneDescriptor {

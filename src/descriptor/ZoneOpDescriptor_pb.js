@@ -267,7 +267,8 @@ proto.ZoneOpDescriptor.ZoneOp = {
   ADD: 0,
   MULT: 1,
   ENTERSTREAM: 3,
-  ENTERZONE: 4
+  ENTERZONE: 4,
+  NOP: 5
 };
 
 /**

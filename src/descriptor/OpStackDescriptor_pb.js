@@ -67,9 +67,6 @@ proto.OpStackDescriptor.prototype.toObject = function(opt_includeInstance) {
  */
 proto.OpStackDescriptor.toObject = function(includeInstance, msg) {
   var f, obj = {
-    dimensionX: jspb.Message.getFieldWithDefault(msg, 1, 0),
-    dimensionY: jspb.Message.getFieldWithDefault(msg, 2, 0),
-    focusIndex: jspb.Message.getFieldWithDefault(msg, 3, 0),
     opsList: jspb.Message.toObjectList(msg.getOpsList(),
     ZoneOpDescriptor_pb.ZoneOpDescriptor.toObject, includeInstance)
   };
@@ -108,18 +105,6 @@ proto.OpStackDescriptor.deserializeBinaryFromReader = function(msg, reader) {
     }
     var field = reader.getFieldNumber();
     switch (field) {
-    case 1:
-      var value = /** @type {number} */ (reader.readUint32());
-      msg.setDimensionX(value);
-      break;
-    case 2:
-      var value = /** @type {number} */ (reader.readUint32());
-      msg.setDimensionY(value);
-      break;
-    case 3:
-      var value = /** @type {number} */ (reader.readUint32());
-      msg.setFocusIndex(value);
-      break;
     case 4:
       var value = new ZoneOpDescriptor_pb.ZoneOpDescriptor;
       reader.readMessage(value,ZoneOpDescriptor_pb.ZoneOpDescriptor.deserializeBinaryFromReader);
@@ -154,27 +139,6 @@ proto.OpStackDescriptor.prototype.serializeBinary = function() {
  */
 proto.OpStackDescriptor.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
-  f = message.getDimensionX();
-  if (f !== 0) {
-    writer.writeUint32(
-      1,
-      f
-    );
-  }
-  f = message.getDimensionY();
-  if (f !== 0) {
-    writer.writeUint32(
-      2,
-      f
-    );
-  }
-  f = message.getFocusIndex();
-  if (f !== 0) {
-    writer.writeUint32(
-      3,
-      f
-    );
-  }
   f = message.getOpsList();
   if (f.length > 0) {
     writer.writeRepeatedMessage(
@@ -183,51 +147,6 @@ proto.OpStackDescriptor.serializeBinaryToWriter = function(message, writer) {
       ZoneOpDescriptor_pb.ZoneOpDescriptor.serializeBinaryToWriter
     );
   }
-};
-
-
-/**
- * optional uint32 dimension_x = 1;
- * @return {number}
- */
-proto.OpStackDescriptor.prototype.getDimensionX = function() {
-  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 1, 0));
-};
-
-
-/** @param {number} value */
-proto.OpStackDescriptor.prototype.setDimensionX = function(value) {
-  jspb.Message.setProto3IntField(this, 1, value);
-};
-
-
-/**
- * optional uint32 dimension_y = 2;
- * @return {number}
- */
-proto.OpStackDescriptor.prototype.getDimensionY = function() {
-  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 2, 0));
-};
-
-
-/** @param {number} value */
-proto.OpStackDescriptor.prototype.setDimensionY = function(value) {
-  jspb.Message.setProto3IntField(this, 2, value);
-};
-
-
-/**
- * optional uint32 focus_index = 3;
- * @return {number}
- */
-proto.OpStackDescriptor.prototype.getFocusIndex = function() {
-  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 3, 0));
-};
-
-
-/** @param {number} value */
-proto.OpStackDescriptor.prototype.setFocusIndex = function(value) {
-  jspb.Message.setProto3IntField(this, 3, value);
 };
 
 

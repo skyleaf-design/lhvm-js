@@ -13,7 +13,7 @@
     {
       "label": "protobuf",
       "type": "shell",
-      "command": "rm -f .src/descriptor/* && protoc --plugin=protoc-gen-ts=./node_modules/.bin/protoc-gen-ts --js_out=import_style=commonjs,binary:./src/descriptor --ts_out=./src/descriptor -I ./message_schema ./message_schema/*.proto",
+      "command": "rm -f .src/descriptor/* && protoc --plugin=protoc-gen-ts=./node_modules/.bin/protoc-gen-ts --js_out=import_style=commonjs,binary:./src/descriptor --ts_out=./src/descriptor -I ../Liquid Hex/LiquidHex/message_schema/ ../Liquid Hex/LiquidHex/message_schema/*.proto",
       "problemMatcher": []
     },
     {

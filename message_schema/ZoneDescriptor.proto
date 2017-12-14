@@ -1,7 +1,0 @@
-syntax = "proto3";
-
-message ZoneDescriptor {
-	uint32 width = 1;
-	uint32 height = 2;
-	repeated bool values = 3;
-}

@@ -8,6 +8,7 @@ import { Add, Multiply, EnterStream, EnterZone } from './the_stack/ZoneOp/index'
 
 
 import Grid from './the_stack/zone/Grid';
+import SelectionZone from './the_stack/zone/SelectionZone';
 
 interface LiquidHexGlobal {
   values: Array<number>
@@ -20,9 +21,13 @@ declare global {
 
 
 window.LiquidHex.stack = new OpStack([
-  new EnterStream(new SineSingleStream({ amplitude: 600, wavelength: 0.07, amplitudeOffset: 1.0 })),
-  new EnterStream(new SineSingleStream({ amplitude: 600, wavelength: 0.07, amplitudeOffset: 1.0, timeOffset: 3 })),
-  new Add()
+  new EnterStream(new SineSingleStream({ wavelength: 0.1, amplitudeOffset: 1.0 })),
+  new EnterStream(new SineSingleStream({ wavelength: 0.07, amplitudeOffset: 1.0, timeOffset: 3 })),
+  new Add(),
+  new EnterStream(new ConstantStream({ constant: 600 })),
+  new Multiply(),
+  new EnterZone(new SelectionZone(5, 5, Array(25).fill(false))),
+  new Multiply()
 ]);
 
 let last_stack_data = window.LiquidHex.stack.data();
