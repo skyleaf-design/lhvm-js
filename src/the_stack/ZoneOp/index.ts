@@ -10,6 +10,5 @@ export { default as Multiply } from './Multiply';
 export { default as EnterStream } from './EnterStream';
 export { default as EnterZone } from './EnterZone';
 
-
 // @TODO: create a generic initializer from a descriptor, that checks which fields
 // are present, and calls the appropriate constructor.

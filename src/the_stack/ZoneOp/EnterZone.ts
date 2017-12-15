@@ -23,7 +23,12 @@ export default class EnterZone implements ZoneOp {
       case ZoneOpDescriptor:
         const descriptor = values as ZoneOpDescriptor;
         if (!descriptor.hasSelectionzone()) { throw new Error("Selection zone is not present.") }
-        this._zone = descriptor.getSelectionzone() as any;
+        const zone_descriptor = descriptor.getSelectionzone();
+        if (zone_descriptor === undefined) { throw new Error("Selection zone is undefined.")}
+        const width = zone_descriptor.getWidth();
+        const height = zone_descriptor.getHeight();
+        const zone_values = zone_descriptor.getValuesList();
+        this._zone= new SelectionZone(width, height, zone_values);
         return;
       default:
         const state = values as ZoneEntryOpState;

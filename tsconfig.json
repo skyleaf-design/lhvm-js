@@ -61,6 +61,7 @@
     "./src/descriptor/SineDoubleDescriptor_pb.js",
     "./src/descriptor/SineSingleDescriptor_pb.js",
     "./src/descriptor/ZoneDescriptor_pb.js",
-    "./src/descriptor/ZoneOpDescriptor_pb.js"
+    "./src/descriptor/ZoneOpDescriptor_pb.js",
+    "./src/descriptor/HeightmapDescriptor_pb.js"
   ]
 }

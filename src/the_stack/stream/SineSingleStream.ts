@@ -105,7 +105,7 @@ export default class SineSingleStream implements MutableStream {
       this._direction = state.direction !== undefined ? state.direction : SineSingleDescriptor.AxisDirection.X;
       this._time_offset = state.timeOffset !== undefined ? state.timeOffset : 0.0;
       this._time_scale = state.timeScale !== undefined ? state.timeScale : 1.0;
-      this._wavelength = state.wavelength !== undefined ? state.wavelength : 1.0;
+      this._wavelength = state.wavelength !== undefined ? state.wavelength : 0.1;
     }
   }
 }
